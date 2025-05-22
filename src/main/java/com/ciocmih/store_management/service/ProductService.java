@@ -1,6 +1,8 @@
 package com.ciocmih.store_management.service;
 
+import com.ciocmih.store_management.dto.CreateProductDTO;
 import com.ciocmih.store_management.dto.UpdateProductDTO;
+import com.ciocmih.store_management.exception.DuplicateProductException;
 import com.ciocmih.store_management.exception.ProductNotFoundException;
 import com.ciocmih.store_management.model.Product;
 import com.ciocmih.store_management.repository.ProductRepository;
@@ -24,6 +26,23 @@ public class ProductService {
                     product.setPrice(dto.price());
                     return productRepository.save(product);
                 })
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(ProductNotFoundException::new);
+    }
+
+    public Product addProduct(CreateProductDTO dto) {
+        Product product = new Product();
+        product.setName(dto.name());
+        product.setDescription(dto.description());
+        product.setPrice(dto.price().doubleValue());
+        product.setQuantity(dto.quantity());
+
+        try {
+            product = productRepository.save(product);
+        } catch (Exception e) {
+            if (e.getMessage().contains("duplicate key")) {
+                throw new DuplicateProductException(e);
+            }
+        }
+        return product;
     }
 }
