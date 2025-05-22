@@ -1,11 +1,12 @@
 package com.ciocmih.store_management.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Date;
 
 @Table(name = "products")
 @Entity
@@ -19,20 +20,23 @@ public class Product {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
+    @NotNull(message = "Product name is required.")
     private String name;
 
     @Column(name = "description")
+    @NotNull(message = "Product description is required.")
     private String description;
 
     @Column(name = "price")
+    @NotNull(message = "Product price must be a number.")
+    @Positive(message = "Product price must be a positive number.")
     private Double price;
 
     @Column(name = "quantity")
+    @NotNull(message = "Product quantity must be a number.")
+    @PositiveOrZero(message = "Product quantity must be a positive number.")
     private Integer quantity;
-
-    @Column(name = "created_at")
-    private Date createdAt;
 
     @Version
     @Column(name = "version")
