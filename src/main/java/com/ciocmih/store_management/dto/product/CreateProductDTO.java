@@ -1,4 +1,4 @@
-package com.ciocmih.store_management.dto;
+package com.ciocmih.store_management.dto.product;
 
 import jakarta.validation.constraints.*;
 

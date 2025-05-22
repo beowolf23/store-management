@@ -1,6 +1,7 @@
 package com.ciocmih.store_management.integration;
 
-import com.ciocmih.store_management.dto.UpdateProductDTO;
+import com.ciocmih.store_management.dto.ApiResponse;
+import com.ciocmih.store_management.dto.product.UpdateProductDTO;
 import com.ciocmih.store_management.exception.ErrorResponse;
 import com.ciocmih.store_management.model.Product;
 import com.ciocmih.store_management.repository.ProductRepository;
@@ -10,24 +11,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.io.File;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 class ProductControllerTest {
+
+    @Container
+    public static DockerComposeContainer<?> environment =
+            new DockerComposeContainer<>(new File("src/test/resources/compose.yaml"))
+                    .withExposedService("postgres", 5432, Wait.forListeningPort());
 
     @LocalServerPort
     private int port;
-
     @Autowired
     private TestRestTemplate restTemplate;
-
     @Autowired
     private ProductRepository productRepository;
-
     private String baseUrl;
 
     @BeforeEach
@@ -179,4 +189,35 @@ class ProductControllerTest {
         assertThat(body.errors()[0]).isEqualTo("Product with the same name already exists.");
     }
 
+    @Test
+    void when_gettingExistingProductById_then_ok_and_returnsProduct() {
+        Product product = productRepository.findAll().getFirst();
+
+        ResponseEntity<ApiResponse<Product>> response = restTemplate.exchange(
+                baseUrl + "/" + product.getId(),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<ApiResponse<Product>>() {
+                }
+        );
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ApiResponse<Product> apiResponse = response.getBody();
+
+        Product foundProduct = apiResponse.getData();
+        assertThat(foundProduct).isNotNull();
+        assertThat(foundProduct.getId()).isEqualTo(product.getId());
+    }
+
+    @Test
+    void when_gettingNonExistingProductById_then_notFound_and_returnsErrorMessage() {
+        ResponseEntity<ErrorResponse> response = restTemplate.getForEntity(
+                baseUrl + "/" + -1,
+                ErrorResponse.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        ErrorResponse body = response.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body.errors()[0]).isEqualTo("Product not found");
+    }
 }
