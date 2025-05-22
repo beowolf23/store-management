@@ -1,18 +1,12 @@
 spring:
   application:
     name: store-management
-
   datasource:
     url: ${DB_URL}/${DB_DBNAME}
     username: ${DB_USER}
     password: ${DB_PASS}
     driver-class-name: org.postgresql.Driver
-
-
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
-  sql:
-    init:
-      mode: always
