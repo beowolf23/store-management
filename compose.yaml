@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: storeuser
+      POSTGRES_PASSWORD: storepass
+      POSTGRES_DB: storedb
+    ports:
+      - "5432:5432"
