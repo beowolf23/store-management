@@ -65,15 +65,17 @@ class ProductControllerTest {
 
         HttpEntity<UpdateProductDTO> request = new HttpEntity<>(dto, headers);
 
-        ResponseEntity<Product> response = restTemplate.exchange(
+        ResponseEntity<ApiResponse<Product>> response = restTemplate.exchange(
                 baseUrl + "/" + product.getId(),
                 HttpMethod.PUT,
                 request,
-                Product.class
+                new ParameterizedTypeReference<ApiResponse<Product>>() {
+                }
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Product updated = response.getBody();
+        ApiResponse<Product> apiResponse = response.getBody();
+        Product updated = apiResponse.getData();
         assertThat(updated).isNotNull();
         assertThat(updated.getPrice()).isEqualTo(10.);
         assertThat(updated.getQuantity()).isEqualTo(19);
@@ -154,15 +156,17 @@ class ProductControllerTest {
 
         HttpEntity<Product> request = new HttpEntity<>(product, headers);
 
-        ResponseEntity<Product> response = restTemplate.exchange(
+        ResponseEntity<ApiResponse<Product>> response = restTemplate.exchange(
                 baseUrl,
                 HttpMethod.POST,
                 request,
-                Product.class
+                new ParameterizedTypeReference<ApiResponse<Product>>() {
+                }
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        Product createdProduct = response.getBody();
+        ApiResponse<Product> apiResponse = response.getBody();
+        Product createdProduct = apiResponse.getData();
         assertThat(createdProduct).isNotNull();
         assertThat(createdProduct.getId()).isNotNull();
     }

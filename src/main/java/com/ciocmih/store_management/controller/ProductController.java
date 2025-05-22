@@ -23,13 +23,25 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Integer productId, @Valid @RequestBody UpdateProductDTO dto) {
-        return ResponseEntity.ok(productService.updateProduct(productId, dto));
+    public ResponseEntity<ApiResponse<Product>> updateProduct(@PathVariable Integer productId, @Valid @RequestBody UpdateProductDTO dto) {
+        Product product = productService.updateProduct(productId, dto);
+        ApiResponse<Product> response = ApiResponse.<Product>builder()
+                .data(product)
+                .statusCode(HttpStatus.OK.value())
+                .success(true)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("")
-    public ResponseEntity<Product> addProduct(@Valid @RequestBody CreateProductDTO dto) {
-        return new ResponseEntity<>(productService.addProduct(dto), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<Product>> addProduct(@Valid @RequestBody CreateProductDTO dto) {
+        Product product = productService.addProduct(dto);
+        ApiResponse<Product> response = ApiResponse.<Product>builder()
+                .data(product)
+                .statusCode(HttpStatus.CREATED.value())
+                .success(true)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{productId}")
