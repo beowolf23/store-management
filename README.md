@@ -21,7 +21,7 @@ A Spring Boot application for managing products in a store. This project provide
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/beowolf23/store-management.git
    cd store-management
    ```
 2. **Build the project:**
