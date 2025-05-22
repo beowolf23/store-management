@@ -7,12 +7,14 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Table(name = "products")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Product {
 
     @Id
