@@ -10,10 +10,13 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/products")
+@EnableMethodSecurity
 public class ProductController {
 
     private final ProductService productService;
@@ -23,6 +26,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse<Product>> updateProduct(@PathVariable Integer productId, @Valid @RequestBody UpdateProductDTO dto) {
         Product product = productService.updateProduct(productId, dto);
         ApiResponse<Product> response = ApiResponse.<Product>builder()
@@ -34,6 +38,7 @@ public class ProductController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse<Product>> addProduct(@Valid @RequestBody CreateProductDTO dto) {
         Product product = productService.addProduct(dto);
         ApiResponse<Product> response = ApiResponse.<Product>builder()
