@@ -1,65 +1,109 @@
-# Store Management Tool
+# 🛒 Store Management System
 
-A Spring Boot application for managing products in a store. This project provides a RESTful API for CRUD operations on products, with security, validation, error handling, and logging features.
+A Spring Boot-based microservices architecture designed for managing store operations. This project is a work in progress, showcasing a modular, scalable approach using a multi-module Maven setup.
 
-## Features
-- **Product Management**: Create, update, retrieve, and list products with pagination.
-- **Validation**: Input validation for product data (name, description, price, quantity).
-- **Error Handling**: Custom error responses for not found, duplicate, and validation errors.
-- **Security**: HTTP Basic authentication with role-based access (ADMIN, USER).
-- **Logging**: Request tracing with unique trace IDs and service method logging using AOP.
-- **Testing**: Integration tests using Testcontainers and JUnit.
+## 📦 Modules
 
-## Getting Started
+The project is organized :
+
+- **product-service**: Manages product-related operations, including CRUD functionality for products.
+- **order-service**: Handles order creation, updates, and retrieval.
+- **inventory-service**: Tracks and manages inventory levels.
+- **payment-service**: Processes payments and handles transaction-related operations.
+- **shared-lib**: Contains shared utilities, models, and configurations used across services.
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Java 21
-- Maven
-- Docker (for running tests with Testcontainers)
 
-### Running the Application
+To set up and run the project, ensure you have the following installed:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/beowolf23/store-management.git
-   cd store-management
-   ```
-2. **Build the project:**
-   ```bash
-   mvn clean install
-   ```
-3. **Run the application:**
-   ```bash
-   mvn spring-boot:run
-   ```
-4. **Access the API:**
-   - Base URL: `http://localhost:8080/api/products`
-   - Use HTTP Basic Auth:
-     - Admin: `admin` / `adminpass`
-     - User: `user` / `userpass`
+- Java 17 or later
+- Maven 3.8.x or later
+- Docker (optional, for containerization)
+- A running instance of Postgres Database (for development) or another compatible database
 
-### Running Tests
+### Build the Project
 
-Integration tests use Testcontainers and require Docker:
+To build all modules, run the following command from the project root:
+
 ```bash
-mvn test
+mvn clean install
 ```
 
-## API Endpoints
-- `POST /api/products` (ADMIN): Add a new product
-- `PUT /api/products/{productId}` (ADMIN): Update a product
-- `GET /api/products/{productId}`: Get product by ID
-- `GET /api/products`: List products (with pagination)
+### Run a Service
 
-## Future Work
-- Implement JWT-based authentication
-- Add Swagger/OpenAPI documentation
-- Improve error messages and internationalization
-- Concurrency control for product updates
-- Add more unit and integration tests
-- Implement caching for product retrieval
-- Add a frontend interface (e.g., React or Angular)
+Navigate to the desired service directory and start it with:
 
-## License
-This project is for educational purposes.
+```bash
+mvn spring-boot:run
+```
 
+For example, to run the product-service:
+
+```bash
+cd product-service
+mvn spring-boot:run
+```
+
+## 🧪 Testing the Product Service
+
+The product-service is fully operational and ready for testing.
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/products` | Retrieve a list of products |
+| GET | `/api/products/{id}` | Retrieve a product by ID |
+| POST | `/api/products` | Create a new product |
+| PUT | `/api/products/{id}` | Update an existing product |
+
+### Authentication
+
+The product-service uses HTTP Basic Authentication. Use the following credentials:
+
+- **Username**: admin
+- **Password**: adminpass
+
+Include the Authorization header in your requests. Example using curl:
+
+```bash
+curl -u admin:adminpass http://localhost:8080/api/products
+```
+
+## 🛠️ Technologies Used
+
+- **Spring Boot 3.4**: Framework for building microservices
+- **Spring Security**: For authentication and authorization
+- **Spring Data JPA**: For database operations
+- **H2 Database**: In-memory database for development
+- **Maven**: Build and dependency management
+- **Docker**: Containerization for deployment
+
+## 📈 Roadmap
+
+- [x] Implement product-service
+- [x] Set up multi-module Maven structure
+- [ ] Develop order-service
+- [ ] Develop inventory-service
+- [ ] Develop payment-service
+- [ ] Implement service discovery and API gateway
+- [ ] Implement security as part of the API gateway
+- [ ] Add centralized configuration management
+- [ ] Integrate distributed tracing and monitoring
+
+## 🤝 Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -m 'Add your feature'`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Open a pull request.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+```
