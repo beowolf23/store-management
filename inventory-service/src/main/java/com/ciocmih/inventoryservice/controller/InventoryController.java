@@ -1,10 +1,18 @@
 package com.ciocmih.inventoryservice.controller;
 
+import com.ciocmih.inventoryservice.model.Item;
+import com.ciocmih.inventoryservice.service.InventoryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/inventory")
+@RequiredArgsConstructor
 public class InventoryController {
+
+    private final InventoryService inventoryService;
 
     @GetMapping
     public String getInventory() {
@@ -12,13 +20,13 @@ public class InventoryController {
     }
 
     @GetMapping("/{productId}")
-    public String getInventoryForProduct(@PathVariable String productId) {
-        return "Inventory for: " + productId;
+    public ResponseEntity<Item> getInventoryForProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(inventoryService.getProductInventory(productId));
     }
 
     @PostMapping
-    public String addProductToInventory(@RequestBody String product) {
-        return product;
+    public ResponseEntity<Item> addProductInventory(@RequestBody Item item) {
+        return new ResponseEntity<>(inventoryService.addProductInventory(item), HttpStatus.CREATED);
     }
 
     @PutMapping("/{productId}")

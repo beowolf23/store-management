@@ -1,0 +1,9 @@
+GET http://localhost:8080/api/inventory/1
+
+> {%
+    client.test("Get Inventory", function () {
+        client.assert(response.status === 200, "Status code should be 200");
+        client.assert(response.body.productId === 1, "Status code should be 200");
+        client.assert(response.body.quantity === 100, "Status code should be 200");
+    });
+ %}

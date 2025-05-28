@@ -1,0 +1,15 @@
+POST http://localhost:8080/api/inventory
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 100
+}
+
+> {%
+    client.test("Create product inventory", function () {
+        client.assert(response.status === 201, "Status code should be 201");
+        client.assert(response.body.productId === 1, "Product ID should be 1");
+        client.assert(response.body.quantity === 100, "Quantity should be 100")
+    })
+%}
