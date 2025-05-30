@@ -6,6 +6,7 @@ import com.ciocmih.productservice.exception.DuplicateProductException;
 import com.ciocmih.productservice.exception.ProductNotFoundException;
 import com.ciocmih.productservice.model.Product;
 import com.ciocmih.productservice.repository.ProductRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,10 +53,8 @@ public class ProductService {
 
         try {
             product = productRepository.save(product);
-        } catch (Exception e) {
-            if (e.getMessage().contains("duplicate key")) {
-                throw new DuplicateProductException(e);
-            }
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateProductException(e);
         }
         return product;
     }

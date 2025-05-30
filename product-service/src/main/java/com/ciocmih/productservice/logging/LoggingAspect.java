@@ -2,7 +2,10 @@ package com.ciocmih.productservice.logging;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +28,6 @@ public class LoggingAspect {
     @AfterReturning(pointcut = "serviceMethods()", returning = "result")
     public void logAfter(JoinPoint joinPoint, Object result) {
         log.info("Exiting {} with result {}", getMethodName(joinPoint), result.toString());
-    }
-
-    @AfterThrowing(pointcut = "serviceMethods()", throwing = "ex")
-    public void logException(JoinPoint joinPoint, Throwable ex) {
-        log.error("Exception in {} with message {}", getMethodName(joinPoint), ex.getMessage(), ex);
     }
 
     private String getMethodName(JoinPoint joinPoint) {

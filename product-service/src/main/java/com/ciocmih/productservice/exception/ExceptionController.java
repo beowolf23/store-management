@@ -29,7 +29,6 @@ public class ExceptionController {
 
     @ExceptionHandler(DuplicateProductException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateProduct(DuplicateProductException e, HttpServletRequest request) {
-        logContextInformation(e);
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(new Date())
                 .status("409")
