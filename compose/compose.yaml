@@ -26,10 +26,22 @@ services:
       context: ../inventory-service
       dockerfile: ../inventory-service/Dockerfile
     ports:
-        - "8080:8080"
+        - "8081:8081"
     networks:
         - default
 
+  products:
+    container_name: "product-service"
+    image: "product-service"
+    build:
+      context: ../product-service
+      dockerfile: ../product-service/Dockerfile
+    env_file:
+      - product-service/.env.local
+    ports:
+        - "8080:8080"
+    networks:
+        - default
 
   kong-migrations:
     container_name: "kong-migrations"

@@ -2,11 +2,12 @@ spring:
   application:
     name: store-management
   datasource:
-    url: ${DB_URL}/${DB_DBNAME}
+    url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASS}
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: ${DB_DRIVER}
   jpa:
+    database-platform: ${DB_DIALECT}
     hibernate:
       ddl-auto: create
     show-sql: true
