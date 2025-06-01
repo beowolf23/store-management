@@ -20,8 +20,7 @@ To set up and run the project, ensure you have the following installed:
 
 - Java 17 or later
 - Maven 3.8.x or later
-- Docker (optional, for containerization)
-- A running instance of Postgres Database (for development) or another compatible database
+- Docker + Docker Compose (for containerization)
 
 ### Build the Project
 
@@ -31,19 +30,12 @@ To build all modules, run the following command from the project root:
 mvn clean install
 ```
 
-### Run a Service
+### Run the project
 
-Navigate to the desired service directory and start it with:
-
-```bash
-mvn spring-boot:run
-```
-
-For example, to run the product-service:
+Navigate to the compose directory and run the following command to start all services using Docker Compose:
 
 ```bash
-cd product-service
-mvn spring-boot:run
+KONG_DATABASE=postgres docker compose --profile database up --build
 ```
 
 ## 🧪 Testing the Product Service
@@ -85,13 +77,18 @@ curl -u admin:adminpass http://localhost:8080/api/products
 
 - [x] Implement product-service
 - [x] Set up multi-module Maven structure
-- [ ] Develop order-service
 - [ ] Develop inventory-service
+- [ ] Develop order-service
 - [ ] Develop payment-service
-- [ ] Implement service discovery and API gateway
-- [ ] Implement security as part of the API gateway
-- [ ] Add centralized configuration management
-- [ ] Integrate distributed tracing and monitoring
+- [ ] Ensure high test coverage
+- [ ] Write API documentation using Swagger
+- [ ] Implement CI/CD pipeline with GitHub Actions
+- [ ] Add Loki and Grafana for logging and monitoring
+- [ ] Implement distributed tracing with OpenTelemetry
+- [ ] Implement API gateway using Kong + a standalone database for storage
+- [ ] Implement security as part of the API gateway using OAuth2 and JWT
+- [ ] Add centralized configuration management using Spring Cloud Config
+- [ ] Add caching for product reads using Redis
 
 ## 🤝 Contributing
 
