@@ -17,6 +17,7 @@
   </properties>
 
   <artifactId>product-service</artifactId>
+  <version>0.0.1</version>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
