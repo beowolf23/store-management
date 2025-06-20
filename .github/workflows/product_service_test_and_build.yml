@@ -42,6 +42,6 @@ jobs:
     - name: Build and push image with Buildpacks
       run: |
         pack build ghcr.io/${{ github.repository_owner }}/product-service \
-          --builder paketobuildpacks/builder:base-jammy \
+          --builder paketobuildpacks/builder-jammy-base \
           --env BP_JVM_VERSION=21 \
           --publish
