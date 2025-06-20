@@ -13,10 +13,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: product-service
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -29,6 +26,7 @@ jobs:
         cache: maven
         
     - name: Run Maven tests
+      working-directory: product-service
       run: mvn test
 
     - name: Install pack CLI
@@ -50,6 +48,7 @@ jobs:
         echo "version=$VERSION" >> $GITHUB_OUTPUT
 
     - name: Build and push image with Buildpacks
+      working-directory: product-service
       run: |
         pack build $IMAGE_NAME:${{ steps.version.outputs.version }} \
           --builder paketobuildpacks/builder-jammy-base \
@@ -57,8 +56,9 @@ jobs:
           --publish
 
     - name: Update image tag in Gitops manifest
+      working-directory: gitops/product-service
       run: |
-        sed -i "s|image: $IMAGE_NAME:.*|image: $IMAGE_NAME:${{ steps.version.outputs.version }}|" gitops/product-service/deployment.yaml
+        sed -i "s|image: $IMAGE_NAME:.*|image: $IMAGE_NAME:${{ steps.version.outputs.version }}|" deployment.yaml
 
     - name: Commit and push GitOps manifest update
       run: |
