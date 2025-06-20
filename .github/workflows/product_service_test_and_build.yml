@@ -52,7 +52,6 @@ jobs:
     - name: Build and push image with Buildpacks
       run: |
         pack build $IMAGE_NAME:${{ steps.version.outputs.version }} \
-          --path product-service \
           --builder paketobuildpacks/builder:base-jammy \
           --env BP_JVM_VERSION=21 \
           --publish
