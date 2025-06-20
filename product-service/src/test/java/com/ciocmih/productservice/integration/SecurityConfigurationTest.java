@@ -7,24 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
-import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.io.File;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
 class SecurityConfigurationTest {
-
-    @Container
-    public static DockerComposeContainer<?> environment =
-            new DockerComposeContainer<>(new File("src/test/resources/compose.yaml"))
-                    .withExposedService("postgres", 5432, Wait.forListeningPort());
 
     @LocalServerPort
     private int port;

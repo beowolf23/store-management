@@ -16,24 +16,13 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.io.File;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
 class ProductControllerTest {
-
-    @Container
-    public static DockerComposeContainer<?> environment =
-            new DockerComposeContainer<>(new File("src/test/resources/compose.yaml"))
-                    .withExposedService("postgres", 5432, Wait.forListeningPort());
 
     @LocalServerPort
     private int port;
@@ -45,9 +34,6 @@ class ProductControllerTest {
     private ProductRepository productRepository;
 
     private String baseUrl;
-
-    @Autowired
-    private TestRestTemplate testRestTemplate;
 
     @Bean
     public RestTemplateBuilder restTemplateBuilder() {
