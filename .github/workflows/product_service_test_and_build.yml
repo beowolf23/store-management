@@ -1,0 +1,43 @@
+name: Run Java tests with Maven and build Docker image with Buildpacks
+
+on:
+  push:
+    paths:
+      - 'product-service/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: product-service
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: temurin
+        cache: maven
+        
+    - name: Run Maven tests
+      run: mvn test
+
+    - name: Log in to Github Container Registry
+      uses: actions/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push image with Buildpacks
+      run: |
+        pack build ghcr.io/${{ github.repository_owner }}/product-service \
+          --builder paketobuildpacks/builder:base-jammy \
+          --env BP_JVM_VERSION=21 \
+          --publish
