@@ -6,6 +6,9 @@ on:
       - 'product-service/**'
   workflow_dispatch:
 
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/product-service
+  
 jobs:
   build:
 
@@ -39,9 +42,17 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Extract Maven version
+      id: version
+      working-directory: product-service
+      run: |
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
     - name: Build and push image with Buildpacks
       run: |
-        pack build ghcr.io/${{ github.repository_owner }}/product-service \
-          --builder paketobuildpacks/builder-jammy-base \
+        pack build $IMAGE_NAME:${{ steps.version.outputs.version }} \
+          --path product-service \
+          --builder paketobuildpacks/builder:base-jammy \
           --env BP_JVM_VERSION=21 \
           --publish
