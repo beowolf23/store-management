@@ -7,14 +7,16 @@ spec:
   project: default
   source:
     repoURL: https://github.com/beowolf23/store-management.git
-    path: gitops
+    path: gitops/product-service/base
     targetRevision: HEAD
+    kustomize:
+      namespace: argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
   syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
-    automated:
-      selfHeal: true
-      prune: true
