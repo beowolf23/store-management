@@ -11,12 +11,14 @@ services:
       BPL_DEBUG_ENABLED: "true"
       BPL_DEBUG_PORT: "5005"
       BPL_DEBUG_SUSPEND: "false"
+    env_file:
+      - inventory-service/.env.local
     ports:
       - "8081:8081"
       - "5006:5005" # used for remote debugging
     networks:
       - default
-      - loki
+      - observability
 
   products:
     container_name: "product-service"
@@ -32,10 +34,10 @@ services:
       - "5005:5005" # used for remote debugging
     networks:
       - default
-      - loki
+      - observability
 
 networks:
-  loki:
+  observability:
     driver: bridge
     external: false
   default:

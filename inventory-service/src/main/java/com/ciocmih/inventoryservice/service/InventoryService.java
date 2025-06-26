@@ -12,10 +12,11 @@ public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
 
-    public Item getProductInventory(Long productId) {
+    public Integer getProductInventory(Long productId) {
         return inventoryRepository
                 .findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + productId));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + productId))
+                .getQuantity();
     }
 
     public Item addProductInventory(Item item) {

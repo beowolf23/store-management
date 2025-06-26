@@ -1,11 +1,13 @@
 package com.ciocmih.productservice.service;
 
+import com.ciocmih.productservice.clients.InventoryClient;
 import com.ciocmih.productservice.dto.product.CreateProductDTO;
 import com.ciocmih.productservice.dto.product.UpdateProductDTO;
 import com.ciocmih.productservice.exception.DuplicateProductException;
 import com.ciocmih.productservice.exception.ProductNotFoundException;
 import com.ciocmih.productservice.model.Product;
 import com.ciocmih.productservice.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,19 +15,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
 
     private final ProductRepository productRepository;
-
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private final InventoryClient inventoryClient;
 
     public Product getProduct(Integer productId) throws ProductNotFoundException {
-        return productRepository
+        Product product = productRepository
                 .findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
+
+        Integer productQuantity = inventoryClient.getQuantity(productId);
+        product.setQuantity(productQuantity);
+        return product;
     }
 
     public Page<Product> getAllProductsWithPagination(int pageNumber, int pageSize) {

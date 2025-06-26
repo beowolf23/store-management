@@ -19,8 +19,8 @@ public class InventoryController {
         return "Inventory data";
     }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<Item> getInventoryForProduct(@PathVariable Long productId) {
+    @GetMapping("/{productId}/quantity")
+    public ResponseEntity<Integer> getInventoryForProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(inventoryService.getProductInventory(productId));
     }
 
