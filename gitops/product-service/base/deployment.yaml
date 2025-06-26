@@ -19,7 +19,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: product-service
-          image: ghcr.io/beowolf23/product-service:0.0.4
+          image: ghcr.io/beowolf23/product-service:0.0.5
           ports:
             - containerPort: 8080
           envFrom:
