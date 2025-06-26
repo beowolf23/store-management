@@ -1,6 +1,6 @@
 <configuration>
 
-    <property name="name" value="product-service"/>
+    <property name="name" value="inventory-service"/>
 
     <!-- Console Appender -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
