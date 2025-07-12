@@ -19,10 +19,9 @@ volumes:
 
 services:
   kong-migrations:
-    container_name: "kong-migrations"
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     command: kong migrations bootstrap
-    profiles: [ "database" ]
+    profiles: ["database"]
     depends_on:
       - db
     environment:
@@ -34,10 +33,9 @@ services:
     restart: on-failure
 
   kong-migrations-up:
-    container_name: "kong-migrations-up"
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     command: kong migrations up && kong migrations finish
-    profiles: [ "database" ]
+    profiles: ["database"]
     depends_on:
       - db
     environment:
@@ -49,7 +47,6 @@ services:
     restart: on-failure
 
   kong:
-    container_name: "kong"
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     user: "${KONG_USER:-kong}"
     environment:
@@ -81,7 +78,7 @@ services:
       - "8444:8444/tcp"
       - "8002:8002/tcp"
     healthcheck:
-      test: [ "CMD", "kong", "health" ]
+      test: ["CMD", "kong", "health"]
       interval: 10s
       timeout: 10s
       retries: 10
@@ -90,13 +87,13 @@ services:
     volumes:
       - kong_prefix_vol:${KONG_PREFIX:-/var/run/kong}
       - kong_tmp_vol:/tmp
-      - ./config:/opt/kong
+      - ./config/kong:/opt/kong
     security_opt:
       - no-new-privileges
 
   db:
     image: postgres:9.5
-    profiles: [ "database" ]
+    profiles: ["database"]
     environment:
       POSTGRES_DB: ${KONG_PG_DATABASE:-kong}
       POSTGRES_USER: ${KONG_PG_USER:-kong}
@@ -111,7 +108,7 @@ services:
           "-d",
           "${KONG_PG_DATABASE:-kong}",
           "-U",
-          "${KONG_PG_USER:-kong}"
+          "${KONG_PG_USER:-kong}",
         ]
       interval: 30s
       timeout: 30s
@@ -126,4 +123,4 @@ services:
 
 secrets:
   kong_postgres_password:
-    file: POSTGRES_PASSWORD
+    file: ./POSTGRES_PASSWORD
